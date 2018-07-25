@@ -26,9 +26,14 @@ class Emitter {
 
   remove(eventName, fn) {
     const namedEvents = this.events[eventName];
-    if (!namedEvents) return;
+    if (!namedEvents || namedEvents.length === 0) return;
     const idx = namedEvents.findIndex(event => event.fn === fn);
     namedEvents.splice(idx, 1);
+  }
+
+  removeAll(eventName) {
+    if (arguments.length === 0) this.events = {};
+    this.events[eventName] = [];
   }
 }
 
