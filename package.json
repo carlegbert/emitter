@@ -1,0 +1,19 @@
+{
+  "name": "emitter",
+  "version": "1.0.0",
+  "description": "Simple Emitter base class.",
+  "main": "Emitter.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlegbert/emitter.git"
+  },
+  "author": "Carl Egbert <egbertcarl@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carlegbert/emitter/issues"
+  },
+  "homepage": "https://github.com/carlegbert/emitter#readme"
+}
