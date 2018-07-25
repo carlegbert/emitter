@@ -17,8 +17,11 @@ const Spy = () => {
 
 test('successfully registers an event registered with #on', (t) => {
   const e = new Emitter();
-  e.on('testEvent', () => {});
+  const fn = () => {};
+  e.on('testEvent', fn);
   t.truthy(e.events.testEvent);
+  t.is(e.events.testEvent.length, 1);
+  t.is(e.events.testEvent[0].fn, fn);
 });
 
 test('successfully emits an event registered with #on', (t) => {
@@ -64,8 +67,11 @@ test('successfully emits an event with multiple arguments', (t) => {
 
 test('successfully registers an event with #once', (t) => {
   const e = new Emitter();
-  e.once('testEvent', () => {});
+  const fn = () => {};
+  e.once('testEvent', fn);
   t.truthy(e.events.testEvent);
+  t.is(e.events.testEvent.length, 1);
+  t.is(e.events.testEvent[0].fn, fn);
 });
 
 test('successfully emits an event registered with #once', (t) => {
@@ -83,4 +89,41 @@ test('only emits an event registered with #once once', (t) => {
   e.emit('testEvent');
   e.emit('testEvent');
   t.is(spy.count(), 1);
+});
+
+test('can register multiple listeners at a single event name', (t) => {
+  const e = new Emitter();
+  const spy1 = Spy();
+  const spy2 = Spy();
+  e.on('testEvent', spy1.fn);
+  e.emit('testEvent');
+  e.on('testEvent', spy2.fn);
+  e.emit('testEvent');
+  t.is(spy1.count(), 2);
+  t.is(spy2.count(), 1);
+});
+
+test('can register multiple listeners and pass them all args', (t) => {
+  const e = new Emitter();
+  const spy1 = Spy();
+  const spy2 = Spy();
+  e.on('testEvent', spy1.fn);
+  e.emit('testEvent');
+  e.on('testEvent', spy2.fn);
+  e.emit('testEvent', 'test_args');
+  t.is(spy1.count(), 2);
+  t.is(spy2.count(), 1);
+  t.is(spy1.lastArgs()[0], 'test_args');
+});
+
+test('can register both #on and #once listeners at the same name', (t) => {
+  const e = new Emitter();
+  const spy1 = Spy();
+  const spy2 = Spy();
+  e.on('testEvent', spy1.fn);
+  e.once('testEvent', spy2.fn);
+  e.emit('testEvent');
+  e.emit('testEvent');
+  t.is(spy1.count(), 2);
+  t.is(spy2.count(), 1);
 });

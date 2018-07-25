@@ -4,14 +4,16 @@ class Emitter {
   }
 
   emit(eventName, ...args) {
-    const event = this.events[eventName];
-    if (!event) return;
-    if (event.once) this.events[eventName] = undefined;
-    event.fn(...args);
+    const eventArray = this.events[eventName];
+    if (!eventArray) return;
+    eventArray.forEach(event => event.fn(...args));
+    this.events[eventName] = eventArray.filter(event => !event.once);
   }
 
   registerEvent(eventName, fn, once = false) {
-    this.events[eventName] = { fn, once };
+    const newEvent = { fn, once };
+    if (this.events[eventName]) this.events[eventName].push(newEvent);
+    else this.events[eventName] = [newEvent];
   }
 
   on(eventName, fn) {
