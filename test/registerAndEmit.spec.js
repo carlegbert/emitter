@@ -1,7 +1,7 @@
 const test = require('ava');
 
 const Emitter = require('../Emitter');
-const { Spy } = require('./util');
+const { InheritingEmitter, Spy } = require('./util');
 
 test('successfully registers an event registered with #on', (t) => {
   const e = new Emitter();
@@ -135,5 +135,31 @@ test('will remove an event registered with #once even if it throws an error', (t
   t.throws(() => {
     e.emit('testEvent');
   }, /I am a very bad function.$/);
+  t.is(e.events.testEvent.length, 0);
+});
+
+test('registers events when extended', (t) => {
+  const e = new InheritingEmitter();
+  e.registerSpy('testEvent');
+  t.truthy(e.events.testEvent);
+  t.is(e.events.testEvent.length, 1);
+  t.is(e.events.testEvent[0].fn, e.spy.fn);
+});
+
+test('emits events when extended', (t) => {
+  const e = new InheritingEmitter();
+  e.registerSpy('testEvent');
+  e.emit('testEvent', 'an_argument');
+  t.is(e.spy.count(), 1);
+  t.is(e.spy.lastArgs().length, 1);
+  t.is(e.spy.lastArgs()[0], 'an_argument');
+});
+
+test('removes events when extended', (t) => {
+  const e = new InheritingEmitter();
+  e.unregisterSpy('testEvent');
+  e.registerSpy('testEvent');
+  t.is(e.events.testEvent.length, 1);
+  e.unregisterSpy('testEvent');
   t.is(e.events.testEvent.length, 0);
 });
