@@ -3,8 +3,8 @@ class Emitter {
     this.events = {};
   }
 
-  emit(eventName) {
-    this.events[eventName]();
+  emit(eventName, ...args) {
+    this.events[eventName](...args);
   }
 
   on(eventName, fn) {
