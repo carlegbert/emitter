@@ -5,8 +5,9 @@ class Emitter {
 
   emit(eventName, ...args) {
     const eventArray = this.events[eventName];
-    const errors = [];
     if (!eventArray) return;
+
+    const errors = [];
     eventArray.forEach((event) => {
       try {
         event.fn(...args);
@@ -14,7 +15,9 @@ class Emitter {
         errors.push(err.message);
       }
     });
+
     this.events[eventName] = eventArray.filter(event => !event.once);
+
     if (errors.length > 0) {
       throw new Error(`Event ${eventName} threw the following errors: ${errors.join(' | ')}`);
     }
@@ -35,10 +38,10 @@ class Emitter {
   }
 
   remove(eventName, fn) {
-    const namedEvents = this.events[eventName];
-    if (!namedEvents || namedEvents.length === 0) return;
-    const idx = namedEvents.findIndex(event => event.fn === fn);
-    namedEvents.splice(idx, 1);
+    const eventsForName = this.events[eventName];
+    if (!eventsForName || eventsForName.length === 0) return;
+    const idx = eventsForName.findIndex(event => event.fn === fn);
+    eventsForName.splice(idx, 1);
   }
 
   removeAll(eventName) {
