@@ -115,3 +115,25 @@ test('can register both #on and #once listeners at the same name', (t) => {
   t.is(spy1.count(), 2);
   t.is(spy2.count(), 1);
 });
+
+test('will continue to emit if an event throws an exception', (t) => {
+  const e = new Emitter();
+  const throwingFn = () => { throw new Error('I am a very bad function.'); };
+  const spy = Spy();
+  e.on('testEvent', throwingFn);
+  e.on('testEvent', spy.fn);
+  t.throws(() => {
+    e.emit('testEvent');
+  }, /I am a very bad function.$/);
+  t.is(spy.count(), 1);
+});
+
+test('will remove an event registered with #once even if it throws an error', (t) => {
+  const e = new Emitter();
+  const throwingFn = () => { throw new Error('I am a very bad function.'); };
+  e.once('testEvent', throwingFn);
+  t.throws(() => {
+    e.emit('testEvent');
+  }, /I am a very bad function.$/);
+  t.is(e.events.testEvent.length, 0);
+});

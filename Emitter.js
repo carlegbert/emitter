@@ -5,9 +5,19 @@ class Emitter {
 
   emit(eventName, ...args) {
     const eventArray = this.events[eventName];
+    const errors = [];
     if (!eventArray) return;
-    eventArray.forEach(event => event.fn(...args));
+    eventArray.forEach((event) => {
+      try {
+        event.fn(...args);
+      } catch (err) {
+        errors.push(err.message);
+      }
+    });
     this.events[eventName] = eventArray.filter(event => !event.once);
+    if (errors.length > 0) {
+      throw new Error(`Event ${eventName} threw the following errors: ${errors.join(' | ')}`);
+    }
   }
 
   registerEvent(eventName, fn, once = false) {
