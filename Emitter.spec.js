@@ -15,13 +15,13 @@ const Spy = () => {
   };
 };
 
-test('successfully registers an event', (t) => {
+test('successfully registers an event registered with #on', (t) => {
   const e = new Emitter();
   e.on('testEvent', () => {});
   t.truthy(e.events.testEvent);
 });
 
-test('successfully emits an event', (t) => {
+test('successfully emits an event registered with #on', (t) => {
   const e = new Emitter();
   const spy = Spy();
   e.on('testEvent', spy.fn);
@@ -40,6 +40,16 @@ test('successfully emits an event with an argument', (t) => {
   t.is(lastArgs[0], 'test argument');
 });
 
+test('emits with no registered events without an error', (t) => {
+  const e = new Emitter();
+  try {
+    e.emit('unregisteredEvent');
+    t.pass();
+  } catch (err) {
+    t.fail(err.message);
+  }
+});
+
 test('successfully emits an event with multiple arguments', (t) => {
   const e = new Emitter();
   const spy = Spy();
@@ -50,4 +60,27 @@ test('successfully emits an event with multiple arguments', (t) => {
   t.is(lastArgs.length, 2);
   t.is(lastArgs[0], 'arg1');
   t.is(lastArgs[1], 'arg2');
+});
+
+test('successfully registers an event with #once', (t) => {
+  const e = new Emitter();
+  e.once('testEvent', () => {});
+  t.truthy(e.events.testEvent);
+});
+
+test('successfully emits an event registered with #once', (t) => {
+  const e = new Emitter();
+  const spy = Spy();
+  e.once('testEvent', spy.fn);
+  e.emit('testEvent');
+  t.is(spy.count(), 1);
+});
+
+test('only emits an event registered with #once once', (t) => {
+  const e = new Emitter();
+  const spy = Spy();
+  e.once('testEvent', spy.fn);
+  e.emit('testEvent');
+  e.emit('testEvent');
+  t.is(spy.count(), 1);
 });
