@@ -1,8 +1,11 @@
 {
-  "name": "emitter",
+  "name": "@carlegbert/emitter",
   "version": "1.0.0",
   "description": "Simple Emitter base class.",
   "main": "Emitter.js",
+  "files": [
+    "Emitter.js"
+  ],
   "scripts": {
     "lint": "eslint **/*.js",
     "test": "ava",
