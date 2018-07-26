@@ -157,9 +157,32 @@ test('emits events when extended', (t) => {
 
 test('removes events when extended', (t) => {
   const e = new InheritingEmitter();
-  e.unregisterSpy('testEvent');
   e.registerSpy('testEvent');
   t.is(e.events.testEvent.length, 1);
   e.unregisterSpy('testEvent');
   t.is(e.events.testEvent.length, 0);
+});
+
+test('Event functions have scope of parent object if that object extends Emitter', (t) => {
+  const e = new InheritingEmitter();
+  e.on('testEvent', e.updateOwnProperty);
+  e.emit('testEvent', 'updated!');
+  t.is(e.objectProperty, 'updated!');
+  t.falsy(e.events.testEvent[0].objectProperty);
+});
+
+test('Bound event handlers keep the scope that they are bound to', (t) => {
+  const e = new Emitter();
+  const obj1 = {
+    fn() {
+      this.fnCalledByMe = true;
+    },
+  };
+  const obj2 = {};
+  e.on('testEvent', obj1.fn.bind(obj2));
+  e.emit('testEvent');
+  t.truthy(obj2.fnCalledByMe);
+  t.falsy(obj1.fnCalledByMe);
+  t.falsy(e.fnCalledByMe);
+  t.falsy(e.events.testEvent[0].fnCalledByMe);
 });

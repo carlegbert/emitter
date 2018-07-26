@@ -10,7 +10,7 @@ class Emitter {
     const errors = [];
     eventArray.forEach((event) => {
       try {
-        event.fn(...args);
+        event.fn.apply(this, args);
       } catch (err) {
         errors.push(err.message);
       }

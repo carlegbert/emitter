@@ -26,6 +26,10 @@ class InheritingEmitter extends Emitter {
   unregisterSpy(eventName) {
     this.remove(eventName, this.spy.fn);
   }
+
+  updateOwnProperty(arg) {
+    this.objectProperty = arg;
+  }
 }
 
 module.exports = {
