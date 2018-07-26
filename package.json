@@ -1,13 +1,18 @@
 {
   "name": "@carlegbert/emitter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple Emitter base class.",
   "main": "Emitter.js",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "files": [
-    "Emitter.js"
+    "Emitter.js",
+    "README.md"
   ],
   "scripts": {
     "lint": "eslint **/*.js",
+    "prepublish": "./prepublish",
     "test": "ava",
     "test:cov": "nyc ava"
   },
