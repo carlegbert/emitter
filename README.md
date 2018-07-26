@@ -75,7 +75,7 @@ emitter.removeAll();
 
 ### A note about scope
 
-Event handlers will be called with the scope of the Emitter object when called. If you do not desire this behaviour, you can use `Function.prototype.bind` to bind your event handler to the scope that you desire, or better yet, use an arrow function.
+Event handlers will be called with the scope of the Emitter object. If you do not desire this behaviour, you can use `Function.prototype.bind` to bind your event handler to the scope that you desire, or better yet, use an arrow function.
 
 ## API
 
