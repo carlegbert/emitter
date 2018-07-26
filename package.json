@@ -8,7 +8,8 @@
   },
   "files": [
     "Emitter.js",
-    "README.md"
+    "README.md",
+    "LICENSE.md"
   ],
   "scripts": {
     "lint": "eslint **/*.js",
