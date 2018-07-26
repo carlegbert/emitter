@@ -41,12 +41,13 @@ class Emitter {
     const eventsForName = this.events[eventName];
     if (!eventsForName || eventsForName.length === 0) return;
     const idx = eventsForName.findIndex(event => event.fn === fn);
+    if (idx === -1) return;
     eventsForName.splice(idx, 1);
   }
 
   removeAll(eventName) {
     if (arguments.length === 0) this.events = {};
-    this.events[eventName] = [];
+    else this.events[eventName] = [];
   }
 }
 

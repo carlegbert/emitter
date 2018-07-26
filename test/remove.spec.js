@@ -92,3 +92,14 @@ test('events can be registered, emitted, and removed if events have previously b
   e.remove('testEvent', spy.fn);
   t.is(spy.count(), 1);
 });
+
+test('remove is a no-op if it does not find a matching function', (t) => {
+  const e = new Emitter();
+  const fn = () => {};
+  const otherFn = () => {};
+  e.on('testEvent', fn);
+  e.remove('testEvent', otherFn);
+  t.is(e.events.testEvent.length, 1);
+  const registeredEvent = e.events.testEvent.find(event => event.fn === fn);
+  t.truthy(registeredEvent);
+});
