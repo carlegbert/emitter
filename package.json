@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "lint": "eslint **/*.js",
-    "prepublish": "./prepublish",
+    "prepublishOnly": "./prepublish",
     "test": "ava",
     "test:cov": "nyc ava",
     "test:watch": "ava --watch"
