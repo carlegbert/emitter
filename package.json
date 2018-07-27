@@ -15,7 +15,8 @@
     "lint": "eslint **/*.js",
     "prepublish": "./prepublish",
     "test": "ava",
-    "test:cov": "nyc ava"
+    "test:cov": "nyc ava",
+    "test:watch": "ava --watch"
   },
   "repository": {
     "type": "git",

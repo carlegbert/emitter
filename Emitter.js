@@ -4,23 +4,24 @@ class Emitter {
   }
 
   emit(eventName, ...args) {
-    const eventArray = this.events[eventName];
-    if (!eventArray) return;
-
+    const listeners = this.listeners(eventName);
     const errors = [];
-    eventArray.forEach((event) => {
+    listeners.forEach((event) => {
       try {
+        if (event.once) this.remove(eventName, event.fn);
         event.fn.apply(this, args);
       } catch (err) {
         errors.push(err.message);
       }
     });
 
-    this.events[eventName] = eventArray.filter(event => !event.once);
-
     if (errors.length > 0) {
       throw new Error(`Event ${eventName} threw the following errors: ${errors.join(' | ')}`);
     }
+  }
+
+  listeners(eventName) {
+    return this.events[eventName] || [];
   }
 
   registerEvent(eventName, fn, once = false) {
@@ -38,11 +39,9 @@ class Emitter {
   }
 
   remove(eventName, fn) {
-    const eventsForName = this.events[eventName];
-    if (!eventsForName || eventsForName.length === 0) return;
-    const idx = eventsForName.findIndex(event => event.fn === fn);
-    if (idx === -1) return;
-    eventsForName.splice(idx, 1);
+    const listeners = this.listeners(eventName);
+    const idx = listeners.findIndex(event => event.fn === fn);
+    if (idx > -1) listeners.splice(idx, 1);
   }
 
   removeAll(eventName) {

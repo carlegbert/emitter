@@ -1,6 +1,6 @@
 # Emitter
 
-This is a simple JavaScript event emitter. It can run in node versions 6.0.0 or higher (and possibly some earlier versions with the correct flags supplied at runtime).
+This is a simple JavaScript event emitter. It can run in node versions 6.0.0 or higher.
 
 ## Installation
 
@@ -75,7 +75,7 @@ emitter.removeAll();
 
 ### A note about scope
 
-Event handlers will be called with the scope of the Emitter object. If you do not desire this behaviour, you can use `Function.prototype.bind` to bind your event handler to the scope that you desire, or better yet, use an arrow function.
+Event handlers will be called with the scope of the Emitter object. If you want your listener to be bound to a different scope, you can use `Function.prototype.bind` to bind your event handler to the scope that you desire, or better yet, use an arrow function.
 
 ## API
 
@@ -85,7 +85,7 @@ Takes no arguments. Will return an instance of the Emitter class.
 
 ### `emit(eventName: String|number, ...args: any)`
 
-Takes an eventName, which ideally should be a string or a number, and any number of additional arguments. Will call all of the event handlers registered at `eventName` and pass them `...args`, in the order they were registered. If any registered events throw an error, a new error will be thrown after all registered events have been called.
+Takes an eventName, which ideally should be a string or a number, and any number of additional arguments. Will call all of the event handlers registered at `eventName` and pass them `...args`, in the order they were registered. If any registered handlers throw an error, a new error will be thrown after all registered events have been called.
 
 ### `on(eventName: String|number, fn: function)`
 
@@ -97,8 +97,12 @@ Will register `fn` for event `eventName`, to be emitted by `emit`. Will be unreg
 
 ### `remove(eventName: String|number, fn: function)`
 
-Will unregister `fn` for event `eventName`, where `fn` is a reference to a function registered at `eventName`. Once unregistered, a handler will no longer be emitted. If there are no events at `eventName`, or if `fn` is not registered at `eventName`, nothing will happen.
+Will unregister `fn` for event `eventName`, where `fn` is a reference to a function registered at `eventName`. Once unregistered, a handler will no longer be emitted. If there are no events at `eventName`, or if `fn` is not a handler for `eventName`, nothing will happen.
 
 ### `removeAll(eventName: String|number)`
 
 Will unregister all events at `eventName`. **If `eventName` is not supplied, ALL events at ALL names will be unregistered.**
+
+### `listeners(eventName: String|number)`
+
+Will get all listeners registered at `eventName` (or any empty array if there are none).
