@@ -196,3 +196,14 @@ test('Names corresponding with object.prototype functions such as `constructor` 
   e.emit('toString');
   t.is(spy.count(), 2);
 });
+
+test('Works when emit is called in event handlers', (t) => {
+  const e = new Emitter();
+  const spy = Spy();
+  const nestedEmit = arg => e.emit('nestedEmit', arg);
+  e.on('outerEmit', nestedEmit);
+  e.on('nestedEmit', spy.fn);
+  e.emit('outerEmit', 'arg');
+  t.is(spy.count(), 1);
+  t.is(spy.lastArgs()[0], 'arg');
+});
