@@ -186,3 +186,13 @@ test('Bound event handlers keep the scope that they are bound to', (t) => {
   t.falsy(e.fnCalledByMe);
   t.falsy(e.listeners('testEvent')[0].fnCalledByMe);
 });
+
+test('Names corresponding with object.prototype functions such as `constructor` can be used as event names', (t) => {
+  const e = new Emitter();
+  const spy = Spy();
+  e.on('constructor', spy.fn);
+  e.on('toString', spy.fn);
+  e.emit('constructor');
+  e.emit('toString');
+  t.is(spy.count(), 2);
+});

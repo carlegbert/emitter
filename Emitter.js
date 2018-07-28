@@ -1,3 +1,5 @@
+const addPrefix = eventName => `__EVENT_${eventName}`;
+
 class Emitter {
   constructor() {
     this.events = {};
@@ -21,13 +23,14 @@ class Emitter {
   }
 
   listeners(eventName) {
-    return this.events[eventName] || [];
+    return this.events[addPrefix(eventName)] || [];
   }
 
   registerEvent(eventName, fn, once = false) {
     const newEvent = { fn, once };
-    if (this.events[eventName]) this.events[eventName].push(newEvent);
-    else this.events[eventName] = [newEvent];
+    const listeners = this.listeners(eventName) || [];
+    listeners.push(newEvent);
+    this.events[addPrefix(eventName)] = listeners;
   }
 
   on(eventName, fn) {
@@ -46,7 +49,7 @@ class Emitter {
 
   removeAll(eventName) {
     if (arguments.length === 0) this.events = {};
-    else this.events[eventName] = [];
+    else this.events[addPrefix(eventName)] = [];
   }
 }
 
