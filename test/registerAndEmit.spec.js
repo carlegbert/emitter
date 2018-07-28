@@ -33,12 +33,9 @@ test('successfully emits an event with an argument', (t) => {
 
 test('emits with no registered events without an error', (t) => {
   const e = new Emitter();
-  try {
+  t.notThrows(() => {
     e.emit('unregisteredEvent');
-    t.pass();
-  } catch (err) {
-    t.fail(err.message);
-  }
+  });
 });
 
 test('successfully emits an event with multiple arguments', (t) => {
