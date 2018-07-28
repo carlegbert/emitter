@@ -28,7 +28,7 @@ class Emitter {
 
   registerEvent(eventName, fn, once = false) {
     const newEvent = { fn, once };
-    const listeners = this.listeners(eventName) || [];
+    const listeners = this.listeners(eventName);
     listeners.push(newEvent);
     this.events[addPrefix(eventName)] = listeners;
   }
