@@ -2,5 +2,12 @@
 
 set -e
 
+for FILE in $(jq -r .files[] "package.json"); do
+  if [ $(git diff --name-only "$FILE") ]; then
+    echo "$FILE has uncommited changes, cancelling publish..."
+    exit 1
+  fi
+done
+
 npm run lint
 npm t

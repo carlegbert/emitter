@@ -9,7 +9,8 @@
   "files": [
     "Emitter.js",
     "README.md",
-    "LICENSE.md"
+    "LICENSE.md",
+    "package.json"
   ],
   "scripts": {
     "lint": "eslint **/*.js",
