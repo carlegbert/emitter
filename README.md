@@ -97,7 +97,7 @@ Will register `fn` for event `eventName`, to be emitted by `emit`. Will be unreg
 
 ### `remove(eventName: String|number, fn: function)`
 
-Will unregister `fn` for event `eventName`, where `fn` is a reference to a function registered at `eventName`. Once unregistered, a handler will no longer be emitted. If there are no events at `eventName`, or if `fn` is not a handler for `eventName`, nothing will happen. If the same listener is registered for an event, only the first instance will be removed.
+Will unregister `fn` for event `eventName`, where `fn` is a reference to a function registered at `eventName`. Once unregistered, a handler will no longer be emitted. If there are no events at `eventName`, or if `fn` is not a handler for `eventName`, nothing will happen. If the same listener is registered for an event multiple times, only the first instance will be removed.
 
 ### `removeAll(eventName: String|number)`
 
