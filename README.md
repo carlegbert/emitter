@@ -105,4 +105,4 @@ Will unregister all events at `eventName`. **If `eventName` is not supplied, ALL
 
 ### `listeners(eventName: String|number)`
 
-Will get all listeners registered at `eventName` (or any empty array if there are none).
+Gets all listeners registered at `eventName` (or any empty array if there are none). Will return an array of objects, each with a `fn` property (the event handler) and a boolean `once` property indicating whether or not the event is a one-time handler.
