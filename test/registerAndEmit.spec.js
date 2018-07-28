@@ -7,9 +7,9 @@ test('successfully registers an event registered with #on', (t) => {
   const e = new Emitter();
   const fn = () => {};
   e.on('testEvent', fn);
-  t.truthy(e.events.testEvent);
-  t.is(e.events.testEvent.length, 1);
-  t.is(e.events.testEvent[0].fn, fn);
+  t.truthy(e.listeners('testEvent'));
+  t.is(e.listeners('testEvent').length, 1);
+  t.is(e.listeners('testEvent')[0].fn, fn);
 });
 
 test('successfully emits an event registered with #on', (t) => {
@@ -57,9 +57,9 @@ test('successfully registers an event with #once', (t) => {
   const e = new Emitter();
   const fn = () => {};
   e.once('testEvent', fn);
-  t.truthy(e.events.testEvent);
-  t.is(e.events.testEvent.length, 1);
-  t.is(e.events.testEvent[0].fn, fn);
+  t.truthy(e.listeners('testEvent'));
+  t.is(e.listeners('testEvent').length, 1);
+  t.is(e.listeners('testEvent')[0].fn, fn);
 });
 
 test('successfully emits an event registered with #once', (t) => {
@@ -135,15 +135,15 @@ test('will remove an event registered with #once even if it throws an error', (t
   t.throws(() => {
     e.emit('testEvent');
   }, /I am a very bad function.$/);
-  t.is(e.events.testEvent.length, 0);
+  t.is(e.listeners('testEvent').length, 0);
 });
 
 test('registers events when extended', (t) => {
   const e = new InheritingEmitter();
   e.registerSpy('testEvent');
-  t.truthy(e.events.testEvent);
-  t.is(e.events.testEvent.length, 1);
-  t.is(e.events.testEvent[0].fn, e.spy.fn);
+  t.truthy(e.listeners('testEvent'));
+  t.is(e.listeners('testEvent').length, 1);
+  t.is(e.listeners('testEvent')[0].fn, e.spy.fn);
 });
 
 test('emits events when extended', (t) => {
@@ -158,9 +158,9 @@ test('emits events when extended', (t) => {
 test('removes events when extended', (t) => {
   const e = new InheritingEmitter();
   e.registerSpy('testEvent');
-  t.is(e.events.testEvent.length, 1);
+  t.is(e.listeners('testEvent').length, 1);
   e.unregisterSpy('testEvent');
-  t.is(e.events.testEvent.length, 0);
+  t.is(e.listeners('testEvent').length, 0);
 });
 
 test('Event functions have scope of parent object if that object extends Emitter', (t) => {
@@ -168,7 +168,7 @@ test('Event functions have scope of parent object if that object extends Emitter
   e.on('testEvent', e.updateOwnProperty);
   e.emit('testEvent', 'updated!');
   t.is(e.objectProperty, 'updated!');
-  t.falsy(e.events.testEvent[0].objectProperty);
+  t.falsy(e.listeners('testEvent')[0].objectProperty);
 });
 
 test('Bound event handlers keep the scope that they are bound to', (t) => {
@@ -184,5 +184,5 @@ test('Bound event handlers keep the scope that they are bound to', (t) => {
   t.truthy(obj2.fnCalledByMe);
   t.falsy(obj1.fnCalledByMe);
   t.falsy(e.fnCalledByMe);
-  t.falsy(e.events.testEvent[0].fnCalledByMe);
+  t.falsy(e.listeners('testEvent')[0].fnCalledByMe);
 });

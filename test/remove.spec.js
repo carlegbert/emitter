@@ -8,7 +8,7 @@ test('can remove an event registered with #on', (t) => {
   const fn = () => {};
   e.on('testEvent', fn);
   e.remove('testEvent', fn);
-  t.is(e.events.testEvent.length, 0);
+  t.is(e.listeners('testEvent').length, 0);
 });
 
 test('can remove an event registered with #once', (t) => {
@@ -16,7 +16,7 @@ test('can remove an event registered with #once', (t) => {
   const fn = () => {};
   e.once('testEvent', fn);
   e.remove('testEvent', fn);
-  t.is(e.events.testEvent.length, 0);
+  t.is(e.listeners('testEvent').length, 0);
 });
 
 test('can remove a single event when muliple have been registered', (t) => {
@@ -26,8 +26,8 @@ test('can remove a single event when muliple have been registered', (t) => {
   e.on('testEvent', fn);
   e.on('testEvent', otherFn);
   e.remove('testEvent', fn);
-  t.is(e.events.testEvent.length, 1);
-  t.truthy(e.events.testEvent.find(event => event.fn === otherFn));
+  t.is(e.listeners('testEvent').length, 1);
+  t.truthy(e.listeners('testEvent').find(event => event.fn === otherFn));
 });
 
 test('does nothing if #remove is called for an eventName with no listeners', (t) => {
@@ -99,7 +99,7 @@ test('remove is a no-op if it does not find a matching function', (t) => {
   const otherFn = () => {};
   e.on('testEvent', fn);
   e.remove('testEvent', otherFn);
-  t.is(e.events.testEvent.length, 1);
-  const registeredEvent = e.events.testEvent.find(event => event.fn === fn);
+  t.is(e.listeners('testEvent').length, 1);
+  const registeredEvent = e.listeners('testEvent').find(event => event.fn === fn);
   t.truthy(registeredEvent);
 });
