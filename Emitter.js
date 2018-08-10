@@ -8,7 +8,7 @@ class Emitter {
   emit(eventName, ...args) {
     const listeners = this.listeners(eventName);
     const errors = [];
-    listeners.slice().forEach((event) => {
+    listeners.forEach((event) => {
       try {
         if (event.once) this.remove(eventName, event.fn);
         event.fn.apply(this, args);
@@ -44,7 +44,9 @@ class Emitter {
   remove(eventName, fn) {
     const listeners = this.listeners(eventName);
     const idx = listeners.findIndex(event => event.fn === fn);
-    if (idx > -1) listeners.splice(idx, 1);
+    if (idx > -1) {
+      this.events[addPrefix(eventName)] = [...listeners.slice(0, idx), ...listeners.slice(idx + 1)];
+    }
   }
 
   removeAll(eventName) {
