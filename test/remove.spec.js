@@ -103,3 +103,14 @@ test('remove is a no-op if it does not find a matching function', (t) => {
   const registeredEvent = e.listeners('testEvent').find(event => event.fn === fn);
   t.truthy(registeredEvent);
 });
+
+test('all listeners fire if an event is removed in middle of emit iteration', (t) => {
+  const e = new Emitter();
+  const spy1 = Spy();
+  const spy2 = Spy();
+  e.once('testEvent', spy1.fn);
+  e.on('testEvent', spy2.fn);
+  e.emit('testEvent');
+  t.is(spy1.count(), 1);
+  t.is(spy2.count(), 1);
+});

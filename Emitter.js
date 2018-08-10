@@ -8,7 +8,7 @@ class Emitter {
   emit(eventName, ...args) {
     const listeners = this.listeners(eventName);
     const errors = [];
-    listeners.forEach((event) => {
+    listeners.slice().forEach((event) => {
       try {
         if (event.once) this.remove(eventName, event.fn);
         event.fn.apply(this, args);
